@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bggdb-deployment
+  labels:
+    name: bggdb-deployment
+  namespace: myns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: bggdb-pod
+  template:
+    metadata:
+      name: bggdb-pod
+      labels:
+        name: bggdb-pod
+    spec:
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-pvc
+        # # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#configmapvolumesource-v1-core
+        # - name: config-vol
+        #   configMap:
+        #     name: config.yaml
+        # # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#emptydirvolumesource-v1-core
+        # - name: tmp-vol
+        #   emptyDir: {}
+        # # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#hostpathvolumesource-v1-core
+        # - name: hostdir-vol
+        #   hostPath:
+        #     path: /opt/tmp
+      containers:
+        - name: bggdb-container
+          image: stackupiss/bgg-database:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            # - name: config-vol
+            #   mountPath: /app/config
+            #   readOnly: true # for configurations and secrets
+            # - name: tmp-vol
+            #   mountPath: /opt/tmp
+            - name: db-volume
+              mountPath: /var/lib/mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bggdb-svc
+  labels:
+    name: bggdb-svc
+  namespace: myns
+spec:
+  type: ClusterIP
+  selector:
+    name: bggdb-pod
+  ports:
+    - port: 3306
+      targetPort: 3306            

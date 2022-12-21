@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bggapp-config
+  namespace: myns
+data:
+  DB_HOST: bggdb-svc.myns.svc.cluster.local

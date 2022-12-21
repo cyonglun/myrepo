@@ -1,0 +1,3 @@
+# ignore all secrets
+*secrets.yaml
+secrets.yaml

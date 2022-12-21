@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cs-config
+  labels:
+    app: codeserver
+    name: cs-config
+  namespace: cs-ns
+data:
+  PUID: "1000"
+  PGID: "1000"
+  TZ: "Asia/Singapore"
+  DEFAULT_WORKSPACE: "/config/workspace"
