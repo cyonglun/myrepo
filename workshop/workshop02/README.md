@@ -1,7 +1,7 @@
 # create namespace
 k apply -f bggns.yaml
 
-# create config map and secert
+# create config map and secret
 k apply -f configs/configmap.yaml
 k apply -f configs/secrets.yaml
 
