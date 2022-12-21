@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dov-bear-pod
+  labels:
+    name: dov-bear-pod
+  namespace: myns
+spec:
+  containers:
+    - name: dov-bear-container
+      image: cyonglun/dov-bear@sha256:fe15bf9c007baac8b1213463b07b34835135062e48562191dd83149c374a089b
+      imagePullPolicy: IfNotPresent
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 3000
+          protocol: TCP
+      env:
+        - name: PORT
+          value: "3000"
+        - name: INSTANCE_NAME
+          value: "dov-bear"
+        - name: INSTANCE_HASH
+          value: "dov-bear-12345"
+      livenessProbe:
+        httpGet:
+          path: "/healthz"
+          port: 3000
