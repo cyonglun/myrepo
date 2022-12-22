@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dbns
+  labels: 
+    name: dbns
+
+---
+### headless service
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-hsvc
+  labels:
+    name: db-hsvc
+  namespace: dbns
+spec:
+  clusterIP: None
+  selector:
+    name: db-pod
+  ports:
+  - port: 3306
+    targetPort: 3306
+
+---
+### stateful deployment
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-sts
+  labels:
+    name: db-sts
+  namespace: dbns
+spec:
+  replicas: 2
+  serviceName: db-hsvc
+  selector:
+    matchLabels:
+      name: db-pod
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: db-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: do-block-storage-xfs
+      resources:
+        requests:
+          storage: 1Gi
+  template:
+    metadata:
+      name: db-pod
+      labels: 
+        name: db-pod
+    spec:
+      containers:
+        - name: db-container
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootroot
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: db-vol
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              cpu: "100m"
+              memoru: 64Mi
+
+---
+# add VPA recommendations
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: db-vpa
+  namespace: dbns
+spec: 
+  targetRef: 
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: db-sts
+  updatePolicy:
+    updateMode: "Off"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: '*'
+        minAllowed:
+          cpu: "100m"
+          memory: 250Mi
+        maxAllowed:
+          cpu: 250m
+          memory: 500Mi
+        controlledResources: [ "cpu", "memory" ]
+      
