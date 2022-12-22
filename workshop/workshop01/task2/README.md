@@ -1,14 +1,16 @@
-# Create Docker Network (bridge)
-docker network create -d bridge mynet 
+# Workshop 01
 
-# Create Docker Volume
-docker volume create myvol
+## Create Docker Network (bridge)
+`docker network create -d bridge mynet`
 
-# mydb
-docker run -d -v myvol:/var/lib/mysql --network mynet --name mydb stackupiss/northwind-db:v1
+## Create Docker Volume
+`docker volume create myvol`
 
-# myapp
-docker run -d -p 3000:3000 -e DB_HOST=mydb -e DB_USER=root -e DB_PASS=changeit --network mynet --name myapp stackupiss/northwind-app:v1
+## mydb
+`docker run -d -v myvol:/var/lib/mysql --network mynet --name mydb stackupiss/northwind-db:v1`
 
-# Docker-compose
-docker-compose -f docker-compose.yml up -d
+## myapp
+`docker run -d -p 3000:3000 -e DB_HOST=mydb -e DB_USER=root -e DB_PASS=changeit --network mynet --name myapp stackupiss/northwind-app:v1`
+
+## Docker-compose
+`docker-compose -f docker-compose.yml up -d`

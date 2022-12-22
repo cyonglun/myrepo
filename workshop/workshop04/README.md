@@ -21,12 +21,20 @@
   - secretKey: retrieved from console
 7. Save File
 
+**_NOTE:_** IP address is retrieved from ingress-nginx LoadBalancer
+
+`k get svc -n ingress-nginx`
+
 ## Upload file to bucket using mc
 `mc cp <local file path> minio/my-bucket`
 
-## Check Console for upload 
+**_NOTE:_** Ensure [Minio CLI](https://min.io/docs/minio/linux/reference/minio-mc.html) is installed
+
+
+## Check Minio Console for uploaded file
 File should be uploaded onto bucket
 
+---
 
 ## Cleanup
 1. Go to digital-ocean web console

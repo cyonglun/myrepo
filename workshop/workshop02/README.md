@@ -1,13 +1,15 @@
-# create namespace
-k apply -f bggns.yaml
+# Workshop 02
 
-# create config map and secret
-k apply -f configs/configmap.yaml
-k apply -f configs/secrets.yaml
+## create namespace
+`k apply -f bggns.yaml`
 
-# create DB svc, pod and container
-k apply -f bggdb.yaml
+## create config map and secret
+`k apply -f configs/configmap.yaml`
 
-# create App svc, pod and container
-k apply -f bggapp.yaml
+`k apply -f configs/secrets.yaml`
 
+## create DB svc, pod and container
+`k apply -f bggdb.yaml`
+
+## create App svc, pod and container
+`k apply -f bggapp.yaml`

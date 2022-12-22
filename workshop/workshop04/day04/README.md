@@ -6,7 +6,7 @@
 ## deploy dov-bear with Horizontal Pod Autoscaler settings
 `k apply -f deployment.yaml`
 
-!!! may have to comment out "NetworkPolicy"
+**_NOTE:_** may have to comment out "NetworkPolicy"
 
 ## port forward to localhost
 `k port-forward -n myns deploy/dov-bear-deployment 8080:3000`
@@ -20,7 +20,7 @@
 ## apply namespace, headless svc, StatefulSet application
 `k apply -f mysql.yaml`
 
-!!! may have to comment out "VerticalPodAutoscaler"
+**_NOTE:_** may have to comment out "VerticalPodAutoscaler"
 
 ## observe that pods are spun up in sequence 
 1. db-sts-0
@@ -58,6 +58,7 @@ helm install vpa -n kube-system fairwinds-stable/vpa
 
 ## apply namespace, headless svc, StatefulSet application and VPA
 `k apply -f mysql.yaml`
+
 ---
 # Test Network Rules
 
