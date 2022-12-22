@@ -6,6 +6,10 @@
 ## Create Secret
 `k apply -f config/minio-secrets.yaml`
 
+**_NOTE_** 
+- username and password should be set in minio-secrets and base64 encoded
+- password must be >10 length
+
 ## Create StatefulSet, Service, Headless Service, Ingress
 `k apply -f minio-deployment.yaml` 
 
